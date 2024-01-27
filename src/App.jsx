@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import './App.css'
 
@@ -7,6 +7,8 @@ function App() {
   const [numberAllowed, setNumberAllowed]  = useState(false)
   const [charAllowed, setCharAllowed] = useState(false)
   const [password, setPassword] = useState("")
+
+  const passref = useRef(null)
 
 
   const passwordGenerator = useCallback(()=>{
@@ -29,6 +31,11 @@ function App() {
 
   },[length,numberAllowed,charAllowed,setPassword])
 
+  function copyPassword(){
+    passref.current?.select()
+    window.navigator.clipboard.writeText(password)
+  }
+
   useEffect(()=>passwordGenerator(),[length,numberAllowed,charAllowed,passwordGenerator])
 
   return (
@@ -44,8 +51,9 @@ function App() {
                     className='py-1 px-3 border-2'
                     value={password}
                     readOnly
+                    ref={passref}
                     />
-            <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ml-5">Copy</button>
+            <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ml-5" onClick={copyPassword}>Copy</button>
           </div>
           <div className=' space-x-2'>
             <input type="range"
